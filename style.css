@@ -223,6 +223,8 @@ td.expense {
 
   opacity: 0;
   visibility: hidden;
+
+  z-index: 999;
 }
 
 .modal-overlay.active {
@@ -233,8 +235,11 @@ td.expense {
 .modal {
   background: #f0f2f5;
   padding: 2.4rem;
-  /* width: 90%;
-  max-width: 500px; */
+  width: 90%;
+  max-width: 500px;
+
+  position: absolute;
+  z-index: 1;
 }
 
 /* ## Form ## */
