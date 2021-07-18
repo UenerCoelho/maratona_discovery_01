@@ -201,7 +201,7 @@ td.description {
   color: var(--dark-blue);
 }
 td.income {
-  color: #121454;
+  color: var(--green);
 }
 td.expense {
   color: #e92929;
