@@ -50,13 +50,13 @@ const transactions = [
 
 const Transaction = {
   incomes() {
-    // Somar todas as Entradas
+    return 'IncomesDisplay'
   },
   expenses() {
-    // Somar todas as saídas
+    return 'expensesDisplay'
   },
   total() {
-    // Entradas - Saídas
+    return 'totalDisplay'
   }
 }
 
@@ -87,6 +87,18 @@ const DOM = {
           `
 
     return html
+  },
+
+  updateBalance() {
+    document
+      .getElementById('incomeDisplay')
+      .innerHTML = Transaction.incomes()
+    document
+      .getElementById('expenseDisplay')
+      .innerHTML = Transaction.expenses()
+    document
+      .getElementById('totalDisplay')
+      .innerHTML = Transaction.total()
   }
 }
 
@@ -110,3 +122,5 @@ const Utils = {
 transactions.forEach(function (transaction) {
   DOM.addTransaction(transaction)
 })
+
+DOM.updateBalance()
