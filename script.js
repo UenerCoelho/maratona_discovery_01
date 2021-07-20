@@ -1,3 +1,4 @@
+// Função Responsável pelo abre e fecha do Modal
 const Modal = {
   open() {
     // Abrir Modal
@@ -15,48 +16,86 @@ const Modal = {
   }
 }
 
+// Variável das transações
 const transactions = [
   {
-    id: 1,
     description: 'Luz',
     amount: -50000,
     date: '23/01/2021',
   },
   {
-    id: 2,
     description: 'WebSite',
     amount: 500000,
     date: '23/01/2021',
   },
   {
-    id: 3,
     description: 'Internet',
     amount: -20000,
     date: '23/01/2021',
   },
   {
-    id: 4,
     description: 'App',
     amount: 200000,
     date: '23/01/2021',
   },
 ]
-/*
-    Eu preciso somar as entradas
-    depois  eu preciso somar as saidas e
-    remover das entradas o valor das saidas
-    assim, eu terei o total
-*/
 
+/* ## Lógica da soma dos valores
+        * Eu preciso somar as entradas
+        * Depois  eu preciso somar as saídas e
+        * Remover das entradas o valor das saídas
+            - assim, eu terei o total
+*/
+// Realização soma e subtração dos valores
 const Transaction = {
+  all: transactions,
+  add(transaction) {
+    Transaction.all.push(transaction)
+
+    App.reload()
+  },
+
+  // Remove itens da Table
+  remove(index) {
+    Transaction.all.splice(index, 1)
+
+    App.reload()
+  },
+
+  // Soma as Entradas
   incomes() {
-    return 'IncomesDisplay'
+    let income = 0;
+    // Pegar todas as transações
+    // Para cada transação,
+    Transaction.all.forEach(transaction => {
+      // se for maior que zero
+      if (transaction.amount > 0) {
+        // Somar a um variável
+        income += transaction.amount;
+      }
+    })
+    // retornar a variável
+    return income;
   },
+
+  // Somas as Saídas
   expenses() {
-    return 'expensesDisplay'
+    let expense = 0;
+    // Pegar todas as transações
+    // para cada transação,
+    Transaction.all.forEach(transaction => {
+      // se for menor que zero
+      if (transaction.amount < 0) {
+        // somar a uma variável e retornar a variável
+        expense += transaction.amount;
+      }
+    })
+    return expense;
   },
+
+  // Soma o total de entradas e subtrai as saídas
   total() {
-    return 'totalDisplay'
+    return Transaction.incomes() + Transaction.expenses();
   }
 }
 
@@ -64,6 +103,7 @@ const Transaction = {
     Eu preciso os dados do HTML com os dados do JS
  */
 
+// Edição da Table
 const DOM = {
   transactionsContainer: document.querySelector('#data-table tbody'),
   addTransaction(transaction, index) {
@@ -73,6 +113,7 @@ const DOM = {
     DOM.transactionsContainer.appendChild(tr)
 
   },
+  // Onde o Usuário vai preencher a table, pelo browser
   innerHTMLTransaction(transaction) {
     const CSSclass = transaction.amount > 0 ? "income" : "expense"
 
@@ -89,19 +130,25 @@ const DOM = {
     return html
   },
 
+  // Responsável por apresentar a formatação do Números na tela
   updateBalance() {
-    document
+    document // Entradas
       .getElementById('incomeDisplay')
-      .innerHTML = Transaction.incomes()
-    document
+      .innerHTML = Utils.formatCurrency(Transaction.incomes())
+    document // Saídas
       .getElementById('expenseDisplay')
-      .innerHTML = Transaction.expenses()
-    document
+      .innerHTML = Utils.formatCurrency(Transaction.expenses())
+    document // Total
       .getElementById('totalDisplay')
-      .innerHTML = Transaction.total()
+      .innerHTML = Utils.formatCurrency(Transaction.total())
+  },
+
+  clearTransactions() {
+    DOM.transactionsContainer.innerHTML = ""
   }
 }
 
+// Formatação dos sinais nos valores
 const Utils = {
   formatCurrency(value) {
     const signal = Number(value) < 0 ? "-" : ""
@@ -112,15 +159,73 @@ const Utils = {
 
     value = value.toLocaleString("pt-BR", {
       style: "currency",
-      currency: "BRL"
+      currency: "BRL" // Transforma em Real Ex.: R$ 2,00
     })
 
     return signal + value
   }
 }
 
-transactions.forEach(function (transaction) {
-  DOM.addTransaction(transaction)
-})
+// Variável que para capturar os dados novo para colocar na Table
+const Form = {
+  description: document.querySelector('input#description'),
+  amount: document.querySelector('input#amount'),
+  date: document.querySelector('input#date'),
 
-DOM.updateBalance()
+  // Retorna os dados dos campos
+  getValues() {
+    return {
+      description: Form.description.value,
+      amount: Form.description.value,
+      date: Form.date.value
+    }
+  },
+
+  // Captura os dados dos campos
+  validateField() {
+    const { description, amount, date } = Form.getValues()
+
+    if
+      (
+      description.trim() === "" ||
+      amount.trim() === "" ||
+      date.trim() === ""
+    ) {
+      throw new Error("Por favor, preencha todos os campos")
+    }
+  },
+
+  submit(event) {
+    event.preventDefault()
+
+    try {
+      // Verificar se todas as informações foram preenchidas (validateField)
+      Form.validateField()
+      // formatar os dados para salvar
+      // Form.formatData()
+      // salvar, e após salvar
+      // apagar os dados do formulário, após salvar
+      // fechar o modal após salvar
+      // Atualizar a aplicação após fechar o modal
+    } catch (error) {
+      alert(error.message)
+    }
+  }
+}
+
+const App = {
+  init() {
+    Transaction.all.forEach(transaction => {
+      DOM.addTransaction(transaction)
+    })
+
+    DOM.updateBalance()
+  },
+
+  reload() {
+    DOM.clearTransactions()
+    App.init()
+  },
+}
+
+App.init()
