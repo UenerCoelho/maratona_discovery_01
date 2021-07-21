@@ -99,10 +99,6 @@ const Transaction = {
   }
 }
 
-/*
-    Eu preciso os dados do HTML com os dados do JS
- */
-
 // Edição da Table
 const DOM = {
   transactionsContainer: document.querySelector('#data-table tbody'),
@@ -150,10 +146,21 @@ const DOM = {
 
 // Formatação dos sinais nos valores
 const Utils = {
-  formatCurrency(value) {
-    const signal = Number(value) < 0 ? "-" : ""
+  formatAmount(value) {
+    value = Number(value.replace(/\,\./g, "")) * 100
 
-    value = String(value).replace(/\D/g, "")
+    return value
+  },
+
+  formatDate(date) {
+    const splittedDate = date.split("-")
+    return `${splittedDate[2]}/${splittedDate[1]}/${splittedDate[0]}`
+  },
+
+  formatCurrency(value) {
+    const signal = Number(value) < 0 ? "-" : " "
+
+    value = String(value).replace(/\D/g, " ")
 
     value = Number(value) / 100
 
@@ -163,7 +170,7 @@ const Utils = {
     })
 
     return signal + value
-  }
+  },
 }
 
 // Variável que para capturar os dados novo para colocar na Table
@@ -172,11 +179,11 @@ const Form = {
   amount: document.querySelector('input#amount'),
   date: document.querySelector('input#date'),
 
-  // Retorna os dados dos campos
+  // Pega os dados dos campos
   getValues() {
     return {
       description: Form.description.value,
-      amount: Form.description.value,
+      amount: Form.amount.value,
       date: Form.date.value
     }
   },
@@ -185,14 +192,38 @@ const Form = {
   validateField() {
     const { description, amount, date } = Form.getValues()
 
-    if
-      (
+    if (
       description.trim() === "" ||
       amount.trim() === "" ||
-      date.trim() === ""
-    ) {
+      date.trim() === "") {
       throw new Error("Por favor, preencha todos os campos")
     }
+  },
+
+  formatValues() {
+    let { description, amount, date } = Form.getValues()
+
+    amount = Utils.formatAmount(amount)
+
+    date = Utils.formatDate(date)
+
+    // console.log(amount, date)
+
+    return {
+      description,
+      amount,
+      date
+    }
+  },
+
+  saveTransaction(transaction) {
+    Transaction.add(transaction)
+  },
+
+  clearFields() {
+    Form.description.value = ""
+    Form.amount.value = ""
+    Form.date.value = ""
   },
 
   submit(event) {
@@ -202,11 +233,13 @@ const Form = {
       // Verificar se todas as informações foram preenchidas (validateField)
       Form.validateField()
       // formatar os dados para salvar
-      // Form.formatData()
-      // salvar, e após salvar
+      const transaction = Form.formatValues()
+      // salvar e Atualizar, após salvar 
+      Form.saveTransaction(transaction)
       // apagar os dados do formulário, após salvar
+      Form.clearFields()
       // fechar o modal após salvar
-      // Atualizar a aplicação após fechar o modal
+      Modal.close()
     } catch (error) {
       alert(error.message)
     }
