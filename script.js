@@ -16,30 +16,43 @@ const Modal = {
   }
 }
 
+// Armazenamento
+const Storage = {
+  get() {
+    return JSON.parse(localStorage.getItem("dev.finances:transaction")) || []
+  },
+  set(transactions) {
+    localStorage.setItem("dev.finances:transaction", JSON.stringify(transactions))
+  }
+}
+
 // Variável das transações
 const Transaction = {
-  all: [
-    {
-      description: 'Luz',
-      amount: -50000,
-      date: '23/01/2021',
-    },
-    {
-      description: 'WebSite',
-      amount: 500000,
-      date: '23/01/2021',
-    },
-    {
-      description: 'Internet',
-      amount: -20000,
-      date: '23/01/2021',
-    },
-    {
-      description: 'App',
-      amount: 200000,
-      date: '23/01/2021',
-    },
-  ],
+  all: Storage.get(),
+  /* Transações státicas antigas
+        [
+          {
+            description: 'Luz',
+            amount: -50000,
+            date: '23/01/2021',
+          },
+          {
+            description: 'WebSite',
+            amount: 500000,
+            date: '23/01/2021',
+          },
+          {
+            description: 'Internet',
+            amount: -20000,
+            date: '23/01/2021',
+          },
+          {
+            description: 'App',
+            amount: 200000,
+            date: '23/01/2021',
+          },
+        ],
+  */
 
   add(transaction) {
     Transaction.all.push(transaction)
@@ -245,14 +258,6 @@ const Form = {
   }
 }
 
-const Storage = {
-  get() {
-    return JSON.parse(localStorage.getItem("dev.finances:transaction")) || []
-  },
-  set(transactions) {
-    localStorage.setItem("dev.finances:transaction", JSON.stringify(transactions))
-  }
-}
 
 const App = {
   init() {
@@ -262,6 +267,8 @@ const App = {
     Transaction.all.forEach(DOM.addTransaction)
 
     DOM.updateBalance()
+
+    Storage.set(Transaction.all)
   },
 
   reload() {
