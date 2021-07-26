@@ -7,7 +7,7 @@
     - JavaScript
 
   ## Sobre o Projeto
-    É uma aplicação de controle financeiro, onde é possível cadastrar e excluir transações e analisá-las.
+  É uma aplicação de controle financeiro, onde é possível cadastrar e excluir transações e analisá-las.
    
 # Licença
   Este projeto está sob a licença <a src="https://github.com/rocketseat-education/maratona-discover-01/blob/main/LICENSE.md">MIT</a>
