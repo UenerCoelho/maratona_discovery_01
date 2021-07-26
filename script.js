@@ -17,38 +17,30 @@ const Modal = {
 }
 
 // Variável das transações
-const transactions = [
-  {
-    description: 'Luz',
-    amount: -50000,
-    date: '23/01/2021',
-  },
-  {
-    description: 'WebSite',
-    amount: 500000,
-    date: '23/01/2021',
-  },
-  {
-    description: 'Internet',
-    amount: -20000,
-    date: '23/01/2021',
-  },
-  {
-    description: 'App',
-    amount: 200000,
-    date: '23/01/2021',
-  },
-]
-
-/* ## Lógica da soma dos valores
-        * Eu preciso somar as entradas
-        * Depois  eu preciso somar as saídas e
-        * Remover das entradas o valor das saídas
-            - assim, eu terei o total
-*/
-// Realização soma e subtração dos valores
 const Transaction = {
-  all: transactions,
+  all: [
+    {
+      description: 'Luz',
+      amount: -50000,
+      date: '23/01/2021',
+    },
+    {
+      description: 'WebSite',
+      amount: 500000,
+      date: '23/01/2021',
+    },
+    {
+      description: 'Internet',
+      amount: -20000,
+      date: '23/01/2021',
+    },
+    {
+      description: 'App',
+      amount: 200000,
+      date: '23/01/2021',
+    },
+  ],
+
   add(transaction) {
     Transaction.all.push(transaction)
 
@@ -98,6 +90,7 @@ const Transaction = {
     return Transaction.incomes() + Transaction.expenses();
   }
 }
+
 
 // Edição da Table
 const DOM = {
@@ -251,6 +244,18 @@ const Form = {
     }
   }
 }
+
+const Storage = {
+  get() {
+    console.log(localStorage)
+  },
+  set(transactions) {
+    localStorage.setItem("dev.finances:transactions",
+      transactions)
+  }
+}
+Storage.set("test")
+Storage.get()
 
 const App = {
   init() {
