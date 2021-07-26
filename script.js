@@ -247,15 +247,12 @@ const Form = {
 
 const Storage = {
   get() {
-    console.log(localStorage)
+    return JSON.parse(localStorage.getItem("dev.finances:transaction")) || []
   },
   set(transactions) {
-    localStorage.setItem("dev.finances:transactions",
-      transactions)
+    localStorage.setItem("dev.finances:transaction", JSON.stringify(transactions))
   }
 }
-Storage.set("test")
-Storage.get()
 
 const App = {
   init() {
