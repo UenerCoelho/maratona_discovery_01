@@ -127,7 +127,7 @@ const DOM = {
             <td class="${CSSclass}">${amount}</td>
             <td class="date">${transaction.date}</td>
             <td>
-              <img onclick="Transaction.remove(${index})" src="./assets/minus.svg" alt="Remover Transação">
+              <img onclick="Transaction.remove(${index})" src="./assets/img/minus.svg" alt="Remover Transação">
             </td>
           `
 
@@ -155,9 +155,10 @@ const DOM = {
 // Formatação dos sinais nos valores
 const Utils = {
   formatAmount(value) {
-    value = Number(value.replace(/\,\./g, "")) * 100
+    // value = Number(value.replace(/\,\./g, "")) * 100
+    value = value * 100
 
-    return value
+    return Math.round(value)
   },
 
   formatDate(date) {
